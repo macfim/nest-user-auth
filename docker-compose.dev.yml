@@ -1,0 +1,25 @@
+version: '3.9'
+
+services:
+  server-dev-db:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password --lower_case_table_names=1
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - '${MYSQL_PORT}:${MYSQL_PORT}'
+    volumes:
+      - server-dev-db-data:/var/lib/postgresql/data
+    networks:
+      - default
+
+volumes:
+  server-dev-db-data:
+
+networks:
+  default:
+    name: server-dev-network
