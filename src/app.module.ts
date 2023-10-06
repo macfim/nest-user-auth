@@ -9,12 +9,14 @@ import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './shared/guards';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
+import envConfig from './config/env.config';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      load: [envConfig],
     }),
     DatabaseModule,
     UsersModule,

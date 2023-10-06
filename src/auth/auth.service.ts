@@ -5,7 +5,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import type { User } from '@prisma/client';
 import * as argon2 from 'argon2';
@@ -14,14 +14,15 @@ import type { AuthDto } from './dto';
 import type { JwtPayload } from './types';
 import { Cache } from 'cache-manager';
 import { type CreateUserDto } from 'src/users/dto';
+import envConfig from 'src/config/env.config';
 
 @Injectable()
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
     private readonly jwtService: JwtService,
-    private readonly configService: ConfigService,
     @Inject('CACHE_MANAGER') private readonly cacheManager: Cache,
+    @Inject(envConfig.KEY) private env: ConfigType<typeof envConfig>,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User | null> {
@@ -124,11 +125,11 @@ export class AuthService {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(newPayload, {
-        secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
+        secret: this.env.JWT_ACCESS_SECRET,
         expiresIn: '15m',
       }),
       this.jwtService.signAsync(newPayload, {
-        secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
+        secret: this.env.JWT_REFRESH_SECRET,
         expiresIn: '7d',
       }),
     ]);
