@@ -8,6 +8,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { APP_GUARD } from '@nestjs/core';
 import { AccessTokenGuard } from './shared/guards';
 import { ConfigModule } from '@nestjs/config';
+import { LoggerModule } from 'nestjs-pino';
 
 @Module({
   imports: [
@@ -20,6 +21,19 @@ import { ConfigModule } from '@nestjs/config';
     AuthModule,
     CacheModule.register({
       isGlobal: true,
+    }),
+    LoggerModule.forRoot({
+      pinoHttp: {
+        customProps: () => ({
+          context: 'HTTP',
+        }),
+        transport: {
+          target: 'pino-pretty',
+          options: {
+            singleLine: true,
+          },
+        },
+      },
     }),
   ],
   controllers: [AppController],

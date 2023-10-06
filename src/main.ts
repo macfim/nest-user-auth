@@ -6,6 +6,7 @@ import {
   Logger,
   ValidationPipe,
 } from '@nestjs/common';
+import { Logger as PinoLogger, LoggerErrorInterceptor } from 'nestjs-pino';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -16,6 +17,9 @@ async function bootstrap() {
   app.setGlobalPrefix('api');
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
+  app.useLogger(app.get(PinoLogger));
+  app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   app.useGlobalPipes(
     new ValidationPipe({
