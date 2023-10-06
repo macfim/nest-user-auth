@@ -7,6 +7,7 @@ import {
   ValidationPipe,
 } from '@nestjs/common';
 import { Logger as PinoLogger, LoggerErrorInterceptor } from 'nestjs-pino';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
@@ -14,6 +15,8 @@ async function bootstrap() {
   const PORT = app.get(ConfigService).get('main.port');
 
   app.enableCors();
+  app.use(helmet());
+
   app.setGlobalPrefix('api');
 
   app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
