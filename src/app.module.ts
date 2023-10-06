@@ -10,13 +10,16 @@ import { AccessTokenGuard } from './shared/guards';
 import { ConfigModule } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import envConfig from './config/env.config';
+import { validate } from './env.validation';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
+      validate,
       isGlobal: true,
       cache: true,
       load: [envConfig],
+      expandVariables: true,
     }),
     DatabaseModule,
     UsersModule,

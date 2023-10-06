@@ -11,7 +11,7 @@ import { Logger as PinoLogger, LoggerErrorInterceptor } from 'nestjs-pino';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { bufferLogs: true });
 
-  const PORT = (app.get(ConfigService).get('PORT') as number) || 3000;
+  const PORT = app.get(ConfigService).get('main.port');
 
   app.enableCors();
   app.setGlobalPrefix('api');
