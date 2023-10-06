@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, User } from '@prisma/client';
-import { DefaultArgs } from '@prisma/client/runtime/library';
+import type { Prisma, User } from '@prisma/client';
+import type { DefaultArgs } from '@prisma/client/runtime/library';
 import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
